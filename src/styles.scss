@@ -2,8 +2,88 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
+:root{
+    --main :#0a192f;
+    --mainlight: #172a46;
+    --white :#ccd6f6;
+    --cyan :#5ff0d0;
+    }
+* {
+    margin: 0;
+    padding: 0;
+}
 
 //Global Style
+
+.html {
+  background-color: dimgray;
+}
+
+.main {
+  background-color: rgb(63, 63, 63);
+  height: 100dvh;
+}
+
+.header {
+  height: 20dvh;
+  background-color: #ccc;
+}
+
+.chat-wrapper {
+
+}
+
+.conversation-tab {
+  width: 100%;
+}
+
+.conversation-tab-btn {
+  text-align: left;
+  width: 100%;
+  background-color: #ccd6f6;
+  padding: 10px;
+  border: yellow 1px ;
+  border-color: yellow;
+}
+
+.conversation-tab {
+
+}
+.input {
+  color: var(--cyan);
+  background-color: var(--main);
+  height: 40px;
+  width: 300px;
+  border-radius: 10px;
+  font-size: 15px;
+ text-shadow: var(--cyan) 0px 0px 20px;
+}
+.glow
+{
+
+}
+
+.conversation-tab-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  gap: 10px;
+}
+
+.conversation-unseen {
+  box-shadow: var(--cyan) 0px 0px 20px;
+  border: 1px solid var(--cyan)
+}
+
+.conversation-seen {
+
+}
+
+.content {
+  height: 100%;
+}
 
 .chat-container {
   display: flex;

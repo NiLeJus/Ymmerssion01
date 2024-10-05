@@ -1,8 +1,7 @@
-
-
+<div [ngClass]="isReceived() ? 'chat-received' : 'chat-sent'"  class="chat">
 <p>{{message.text}}</p>
 <p>{{message.sender_id}}</p>
-<div [ngClass]="isReceived() ? 'chat-received' : 'chat-sent'"  class="chat"></div>
+</div>
 <!---
 <button (click)="dev()">Oui</button>
 -->

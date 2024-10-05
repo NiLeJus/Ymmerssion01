@@ -1,7 +1,8 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, Input } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { ChatBubbleComponent } from './components/chat-bubble/chat-bubble.component';
 import { UserService } from '../../services/user.service';
+import { TConversation } from '../../_models/conversation.model';
 
 @Component({
   selector: 'app-chat-screen',
@@ -14,7 +15,7 @@ import { UserService } from '../../services/user.service';
 
 export class ChatScreenComponent {
 
-
+  @Input({required: true}) selectedConversation! : TConversation
 
 constructor( public chatService: ChatService, public userService: UserService) {}
 messages = computed(() => {

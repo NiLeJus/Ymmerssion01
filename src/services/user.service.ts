@@ -4,7 +4,7 @@ import { TUser } from '../_models/user.model';
 
 @Injectable({providedIn: 'root'})
 export class UserService {
-  private _thisUser: any = 
+  private _thisUser: any =
   {user_id: '1'}
 
 
