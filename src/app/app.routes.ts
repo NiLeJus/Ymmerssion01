@@ -6,7 +6,7 @@ import { InboxScreenComponent } from '../screens/inbox-screen/inbox-screen.compo
 import { LandingScreenComponent } from '../screens/landing-screen/landing-screen.component';
 
 export const routes: Routes = [
-  {path: '', component: LandingScreenComponent },
+  { path: 'landing', component: LandingScreenComponent },
   { path: 'chat', component: ChatScreenComponent },
   { path: 'logging', component: LoggingScreenComponent },
   { path: 'register', component: RegisterScreenComponent },

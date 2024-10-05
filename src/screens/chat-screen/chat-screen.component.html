@@ -1,1 +1,7 @@
-<p>chat-screen works!</p>
+<div>
+  @for (message of messages(); track $index) {
+    <app-chat-bubble [message]="message"/>
+      } @empty {
+      <li>Pas de message</li>
+      }
+</div>
