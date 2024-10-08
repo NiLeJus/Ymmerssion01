@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
 import { getDatabase, ref, set, get } from '@angular/fire/database';
 
 @Injectable({
@@ -28,8 +28,17 @@ export class Register {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
+  loginWithGoogle(){
+    const provider = new GoogleAuthProvider;
+    return signInWithPopup(this.auth, provider)
+  }
+
   logout() {
     return signOut(this.auth);
+  }
+
+  resetPassword(email: string) {
+    return sendPasswordResetEmail(this.auth, email);
   }
 
   async getUserName(userId: string) {
