@@ -1,3 +1,20 @@
+/* comfortaa-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Comfortaa';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./asset/font/comfortaa-v45-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* comfortaa-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Comfortaa';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./asset/font/comfortaa-v45-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,8 +33,65 @@
 
 //Global Style
 
-.html {
+
+@layer base {
+h1, h2, h3, h4, h5, h6 {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Comfortaa';
+  font-style: normal;
+  font-weight: 700;
+}
+
+html {
   background-color: dimgray;
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Comfortaa';
+  font-style: normal;
+  font-weight: 400;
+}
+}
+
+.google-button {
+  color: #000;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 45px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 16px;
+  text-decoration: none;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 2px 5px #00000014;
+  background-color: white;
+}
+
+.google-button:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.google-button img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+
+.google-button:hover img {
+  transform: rotate(360deg);
+}
+
+.button-animated:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.link-underline:hover {
+  text-decoration: underline;
 }
 
 .main {
@@ -107,12 +181,12 @@
   padding: 20px;
 }
 
-input[type="text"] {
+input {
   flex: 1;
   border: none;
   border-bottom: 1px solid #ccc;
   padding: 10px;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 button {
