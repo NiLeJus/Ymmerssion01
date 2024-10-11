@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class UserScreenComponent implements OnInit {
   isLogging: boolean = false;
-  user: string | null = null;
+  user: {name: string | null, email: string | null} | null = null;
 
   constructor(
     public registerService: Register,
@@ -29,14 +29,16 @@ export class UserScreenComponent implements OnInit {
   }
 
   ngOnInit() {
-  this.afAuth.onAuthStateChanged(async (user) => {
+    this.afAuth.onAuthStateChanged(async (user) => {
       if (!user) {
         this.isLogging = false;
         this.router.navigate(['/']);
       } else {
         this.isLogging = true;
-        this.user = await this.registerService.getUserName(user.uid); // Récupère le nom de l'utilisateur
-        console.log(`User logged in: ${this.user}`);
+        // Récupérer le profil complet (nom et email)
+        const profile = await this.registerService.getUserName(user.uid);
+        this.user = profile; // Affecter l'objet { name, email } à la variable `user`
+        console.log(`User logged in:`, this.user);
       }
     })
 

@@ -47,22 +47,16 @@ export class LoggingScreenComponent {
   }
 
   HandleGoogle() {
-    this.loggingService
-      .loginWithGoogle()
-      .then((result) => {
-        const user = result.user;
-        const isGoogleUser = user.providerData.some(
-          (provider) => provider.providerId === 'google.com'
-        );
-        if (isGoogleUser) {
-          alert('Connexion réussi avec Google!');
+      this.loggingService.loginWithGoogle()
+        .then((userCredential) => {
+          console.log('Utilisateur Google connecté:', userCredential.user);
           this.router.navigate(['/']);
-        } else {
-          alert('Utilisateur non géré par Google');
-        }
-      })
-      .catch((err) => alert('Erreur lors de la connexion : ' + err.message));
-  }
+        })
+        .catch((error) => {
+          console.error('Erreur de connexion Google:', error);
+        });
+    }
+   
 
   ngOnInit() {
     this.afAuth.onAuthStateChanged(async (user) => {
