@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, UserCredential } from '@angular/fire/auth';
 import { Firestore, setDoc, getDoc, doc } from '@angular/fire/firestore';
 
 @Injectable({
@@ -27,9 +27,25 @@ export class Register {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  loginWithGoogle(){
+  async loginWithGoogle(): Promise<UserCredential>{
     const provider = new GoogleAuthProvider;
-    return signInWithPopup(this.auth, provider)
+    try {
+      const userCredential = await signInWithPopup(this.auth, provider)
+      const user = userCredential.user;
+      const userId = user.uid;
+
+      await setDoc(doc(this.firestore, 'users', userId), {
+        name: user.displayName,
+        email: user.email,
+      })
+
+      console.log("user found")
+      return userCredential;
+
+    } catch (err) {
+      console.error("Error signing in with popup", err);
+      throw err;
+    }
   }
 
   logout() {
@@ -46,7 +62,10 @@ export class Register {
 
     if (userSnapshot.exists()) {
       const userData = userSnapshot.data();
-      return userData ? userData['name'] : null;
+      return {
+        name: userData ? userData['name'] : null,
+        email: userData ? userData['email'] : null
+      }
     } else {
       return null;
     }
