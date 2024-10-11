@@ -4,6 +4,7 @@ import { routes } from "./app.routes";
 import { provideClientHydration } from "@angular/platform-browser";
 import { initializeApp, provideFirebaseApp } from "@angular/fire/app";
 import { getAuth, provideAuth } from '@angular/fire/auth'; // Utilisation de la version moderne
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCjfe-rrErCPOMGahgIxdh6iPW5tuKhxu0",
@@ -12,7 +13,7 @@ const firebaseConfig = {
   projectId: "sample-firebase-ai-app-491ba",
   storageBucket: "sample-firebase-ai-app-491ba.appspot.com",
   messagingSenderId: "303273104085",
-  appId: "1:303273104085:web:56f021fffa813b2555085c",
+  appId: "1:303273104085:web:56f021fffa813b2555085c"
 };
 
 export const appConfig: ApplicationConfig = {
@@ -21,6 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideAuth(() => getAuth())
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore())
   ],
 };

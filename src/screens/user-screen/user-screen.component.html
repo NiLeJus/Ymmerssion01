@@ -1,3 +1,6 @@
-<p>
-  user-screen works!
-</p>
+<button (click)="handleLoggout()">Logout</button>
+<div>
+  @if (user){
+  <h1>Welcome, {{ user }}</h1>
+  }
+</div>

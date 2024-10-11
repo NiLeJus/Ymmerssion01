@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
-import { getDatabase, ref, set, get } from '@angular/fire/database';
+import { Firestore, setDoc, getDoc, doc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Register {
-  private db = getDatabase(); // Accès à la Realtime Database
+export class Register { 
 
-  constructor(private auth: Auth) {}
+  constructor(private auth: Auth, private firestore: Firestore) {}
 
   async register(name: string, email: string, password: string) {
     console.log('Enregistrement avec:', name, email, password);
@@ -16,7 +15,7 @@ export class Register {
     const userId = userCredential.user.uid;
 
     // Sauvegarde du nom et de l'email dans la Realtime Database
-    await set(ref(this.db, 'users/' + userId), {
+    await setDoc(doc(this.firestore, 'users' , userId), {
       name,
       email,
     });
@@ -42,11 +41,12 @@ export class Register {
   }
 
   async getUserName(userId: string) {
-    const userRef = ref(this.db, 'users/' + userId);
-    const snapshot = await get(userRef);
+    const userRef = doc(this.firestore, 'users', userId);
+    const userSnapshot  = await getDoc(userRef);
 
-    if (snapshot.exists()) {
-      return snapshot.val().name;
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.data();
+      return userData ? userData['name'] : null;
     } else {
       return null;
     }
