@@ -8,12 +8,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-user-screen',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <button (click)="handleLoggout()">Logout</button>
-    <div *ngIf="user">
-      <h1>Welcome, {{ user }}</h1>
-    </div>
-  `,
+  templateUrl: './user-screen.component.html',
   styleUrls: ['./user-screen.component.css'],
 })
 export class UserScreenComponent implements OnInit {
@@ -34,7 +29,7 @@ export class UserScreenComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.afAuth.onAuthStateChanged(async (user) => {
+  this.afAuth.onAuthStateChanged(async (user) => {
       if (!user) {
         this.isLogging = false;
         this.router.navigate(['/']);
@@ -43,6 +38,7 @@ export class UserScreenComponent implements OnInit {
         this.user = await this.registerService.getUserName(user.uid); // Récupère le nom de l'utilisateur
         console.log(`User logged in: ${this.user}`);
       }
-    });
+    })
+
   }
 }
