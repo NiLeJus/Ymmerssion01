@@ -1,18 +1,16 @@
 import { Routes } from '@angular/router';
-import { ChatScreenComponent } from '../screens/chat-screen/chat-screen.component';
-import { LoggingScreenComponent } from '../screens/logging-screen/logging-screen.component';
-import { RegisterScreenComponent } from '../screens/register-screen/register-screen.component';
-import { InboxScreenComponent } from '../screens/inbox-screen/inbox-screen.component';
-import { LandingScreenComponent } from '../screens/landing-screen/landing-screen.component';
-import { UserScreenComponent } from '../screens/user-screen/user-screen.component';
-import { ResetPasswordComponent } from '../screens/reset-password-screen/reset-password.component';
+import { BoardScreenComponent } from '../screens/board-screen/board-screen.component';
+import { UserScreenComponent } from '../screens/connection-screen/user-screen/user-screen.component';
+import { ConnectionScreenComponent } from '../screens/connection-screen/connection-screen.component';
+import { LoggingScreenComponent } from '../screens/connection-screen/logging-screen/logging-screen.component';
+import { RegisterScreenComponent } from '../screens/connection-screen/register-screen/register-screen.component';
+import { ResetPasswordSectionComponent } from '../screens/connection-screen/reset-password-section/reset-password-section.component';
 
 export const routes: Routes = [
-  { path: 'landing', component: LandingScreenComponent },
-  { path: 'chat', component: ChatScreenComponent },
+  { path: '', component: ConnectionScreenComponent },
+  { path: 'board', component: BoardScreenComponent },
+  { path: 'user-profile', component: UserScreenComponent },
   { path: 'logging', component: LoggingScreenComponent },
   { path: 'register', component: RegisterScreenComponent },
-  { path: 'inbox', component: InboxScreenComponent },
-  { path: 'user-profile', component: UserScreenComponent },
-  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordSectionComponent },
 ];
