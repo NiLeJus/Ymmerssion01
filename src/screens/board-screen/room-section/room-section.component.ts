@@ -15,6 +15,7 @@ export class RoomSectionComponent  {
   @Input({ required: true }) _selectedConversation!: TConversation;
 
   isCreatingARoom = false
+
   _conversationTitle = computed(() => {
    if (this._selectedConversation === undefined) { return "Selectionne une conv"}
     else { return this._selectedConversation.title}

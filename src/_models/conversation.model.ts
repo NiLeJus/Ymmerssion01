@@ -12,7 +12,7 @@ export type TConversation = {
   users_id: string[];
   title: string;
   messages: TMessage[];
-  timeStamp: string
+  timestamp: string
 };
 
 export type TConversations = TConversation[]
