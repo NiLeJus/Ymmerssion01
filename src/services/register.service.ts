@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
-import { getDatabase, ref, set, get } from '@angular/fire/database';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, UserCredential } from '@angular/fire/auth';
+import { Firestore, setDoc, getDoc, doc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Register {
-  private db = getDatabase(); // Accès à la Realtime Database
+export class Register { 
 
-  constructor(private auth: Auth) {}
+  constructor(private auth: Auth, private firestore: Firestore) {}
 
   async register(name: string, email: string, password: string) {
     console.log('Enregistrement avec:', name, email, password);
@@ -16,7 +15,7 @@ export class Register {
     const userId = userCredential.user.uid;
 
     // Sauvegarde du nom et de l'email dans la Realtime Database
-    await set(ref(this.db, 'users/' + userId), {
+    await setDoc(doc(this.firestore, 'users' , userId), {
       name,
       email,
     });
@@ -28,9 +27,25 @@ export class Register {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  loginWithGoogle(){
+  async loginWithGoogle(): Promise<UserCredential>{
     const provider = new GoogleAuthProvider;
-    return signInWithPopup(this.auth, provider)
+    try {
+      const userCredential = await signInWithPopup(this.auth, provider)
+      const user = userCredential.user;
+      const userId = user.uid;
+
+      await setDoc(doc(this.firestore, 'users', userId), {
+        name: user.displayName,
+        email: user.email,
+      })
+
+      console.log("user found")
+      return userCredential;
+
+    } catch (err) {
+      console.error("Error signing in with popup", err);
+      throw err;
+    }
   }
 
   logout() {
@@ -42,11 +57,15 @@ export class Register {
   }
 
   async getUserName(userId: string) {
-    const userRef = ref(this.db, 'users/' + userId);
-    const snapshot = await get(userRef);
+    const userRef = doc(this.firestore, 'users', userId);
+    const userSnapshot  = await getDoc(userRef);
 
-    if (snapshot.exists()) {
-      return snapshot.val().name;
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.data();
+      return {
+        name: userData ? userData['name'] : null,
+        email: userData ? userData['email'] : null
+      }
     } else {
       return null;
     }

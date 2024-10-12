@@ -1,10 +1,10 @@
+import { ApplicationConfig, provideZoneChangeDetection } from "@angular/core";
+import { provideRouter } from "@angular/router";
+import { routes } from "./app.routes";
+import { provideClientHydration } from "@angular/platform-browser";
+import { initializeApp, provideFirebaseApp, getApp } from "@angular/fire/app";
+import { getAuth, provideAuth } from '@angular/fire/auth'; // Utilisation de la version moderne
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { provideFirebaseApp, initializeApp, getApp } from '@angular/fire/app'
-
-import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDb4-YJNJ8XzPdTauldWBYQSzgkMIWIy0k",
@@ -21,6 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
+    provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideClientHydration(),
   ],

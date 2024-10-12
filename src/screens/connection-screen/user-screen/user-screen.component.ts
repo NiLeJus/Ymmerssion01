@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Register } from '../../services/register.service';
+import { Register } from '../../../services/register.service';
 import { Router } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
@@ -8,17 +8,12 @@ import { CommonModule } from '@angular/common';
   selector: 'app-user-screen',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <button (click)="handleLoggout()">Logout</button>
-    <div *ngIf="user">
-      <h1>Welcome, {{ user }}</h1>
-    </div>
-  `,
-  styleUrls: ['./user-screen.component.scss'],
+  templateUrl: './user-screen.component.html',
+  styleUrls: ['./user-screen.component.css'],
 })
 export class UserScreenComponent implements OnInit {
   isLogging: boolean = false;
-  user: string | null = null;
+  user: {name: string | null, email: string | null} | null = null;
 
   constructor(
     public registerService: Register,
@@ -40,9 +35,12 @@ export class UserScreenComponent implements OnInit {
         this.router.navigate(['/']);
       } else {
         this.isLogging = true;
-        this.user = await this.registerService.getUserName(user.uid); // Récupère le nom de l'utilisateur
-        console.log(`User logged in: ${this.user}`);
+        // Récupérer le profil complet (nom et email)
+        const profile = await this.registerService.getUserName(user.uid);
+        this.user = profile; // Affecter l'objet { name, email } à la variable `user`
+        console.log(`User logged in:`, this.user);
       }
-    });
+    })
+
   }
 }
