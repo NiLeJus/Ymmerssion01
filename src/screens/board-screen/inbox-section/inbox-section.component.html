@@ -1,0 +1,42 @@
+<div class="relative flex  flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-l-[calc(2rem+1px)]">
+  <div class="border-b border-gray-200 p-5 sm:flex sm:items-center sm:justify-between">
+    <h3 class="text-base font-semibold leading-6 text-gray-900">
+      Rooms
+    </h3>
+    <div class="mt-3 sm:ml-4 sm:mt-0">
+      <button [ngClass]="{hidden: isCreatinARoom}" type="button" (click)="createRoom()" class="rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100">Créer une Room</button>
+      <button [ngClass]="{hidden: !isCreatinARoom}"  type="button" (click)="createRoom()" class="rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-red-600 shadow-sm hover:bg-indigo-100">Annuler</button>
+
+    </div>
+
+
+  </div>
+
+  @for (conversation of _conversations; track $index) {
+    <app-room-tab
+    [ngClass]="{hidden: isCreatinARoom}"
+    class="conversation-tab" (click)=" onSelectRoom(conversation)"
+    [conversation]="conversation"/>
+  } @empty {
+    <li [ngClass]="{hidden: isCreatinARoom}">Pas d'amis</li>
+  }
+
+  <app-create-room-section [ngClass]="{hidden: !isCreatinARoom}"/>
+
+
+</div>
+<!--
+  <div class="conversation-tab-wrapper">
+    @for (conversation of conversations(); track $index) {
+      <app-room-tab
+      class="conversation-tab" (click)="conversationSelected(conversation)"
+      [conversation]="conversation" [actualUser]="actualUser()" [hasUnseen]="hasUnseen(conversation.id)"/>
+    } @empty {
+      <li>Pas d'amis</li>
+    }
+  </div>
+
+  @if (selectedConversation! === undefined) {
+    <app-room-section [selectedConversation]="selectedConversation()"/>
+  }
+  -->
