@@ -1,5 +1,5 @@
+import { FirebaseService } from './../../services/fireBase.service';
 import { Component, computed, OnInit, inject, signal, WritableSignal } from '@angular/core';
-import { FirebaseService } from '../../services/fireBase.service';
 import { InboxSectionComponent } from './inbox-section/inbox-section.component';
 import { RoomSectionComponent } from './room-section/room-section.component';
 import { InputSectionComponent } from './input-section/input-section.component';
@@ -14,7 +14,8 @@ import { CreateRoomSectionComponent } from "./create-room-section/create-room-se
   styleUrls: ['./board-screen.component.scss']
 })
 export class BoardScreenComponent implements OnInit {
-  messagesFirebaseService = inject(FirebaseService);
+  firebaseService = inject(FirebaseService);
+
   _conversations: any = [];
   _selectedConversation: any
 
@@ -23,7 +24,7 @@ export class BoardScreenComponent implements OnInit {
   _selectedConversationID: any = undefined;
 
   ngOnInit(): void {
-    this.messagesFirebaseService.getConversations().subscribe((conversation) => {
+    this.firebaseService.getConversations().subscribe((conversation) => {
       this._conversations.push(conversation);
 
       // Si _conversations a été imbriqué
@@ -31,6 +32,10 @@ export class BoardScreenComponent implements OnInit {
         this._conversations = this._conversations[0];
       }
     });
+
+    this.firebaseService.getUsers().subscribe((user) => {
+      console.log(user)
+    })
   }
 
   onSelectConversation(conversation: any) {
