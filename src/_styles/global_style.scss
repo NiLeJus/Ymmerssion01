@@ -4,7 +4,7 @@
   font-family: 'Comfortaa';
   font-style: normal;
   font-weight: 400;
-  src: url('./asset/font/comfortaa-v45-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url('../asset/font/comfortaa-v45-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 /* comfortaa-700 - latin */
 @font-face {
@@ -12,7 +12,7 @@
   font-family: 'Comfortaa';
   font-style: normal;
   font-weight: 700;
-  src: url('./asset/font/comfortaa-v45-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url('../asset/font/comfortaa-v45-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 
 @tailwind base;
@@ -20,6 +20,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
+
 :root{
     --main :#0a192f;
     --mainlight: #172a46;
@@ -48,6 +49,7 @@ html {
   font-family: 'Comfortaa';
   font-style: normal;
   font-weight: 400;
+  height: 100dvh;
 }
 }
 
@@ -95,18 +97,47 @@ html {
 }
 
 .main {
-  background-color: rgb(63, 63, 63);
+  background-color: rgb(156, 156, 156);
   height: 100dvh;
-}
-
-.header {
-  height: 20dvh;
-  background-color: #ccc;
-}
-
-.chat-wrapper {
+  margin: 0 auto;
+  height: 100dvh;
 
 }
+
+.wrapper {
+  display: flex;
+  flex-direction: column; /* Organise les éléments en colonne */
+  justify-content: center; /* Centre verticalement (si le parent a une hauteur définie) */
+  align-items: center; /* Centre horizontalement */
+  height: 100vh; /* Ajuste la hauteur selon tes besoins, ici 100% de la hauteur de la fenêtre */
+  background-color: #e9ecef;
+}
+
+/* Le header sera centré horizontalement dans le wrapper */
+header {
+
+  margin:0  10px auto;
+}
+
+.header-pos {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  z-index: 1000; /* pour s'assurer que le header soit au-dessus des autres éléments */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* un peu d'ombre pour donner un effet de profondeur */
+}
+
+.header-pos{
+  width: 100%;
+  max-width: 1200px; /* Limite la largeur du header */
+  padding: 0 20px; /* Optionnel: pour ajouter un peu d'espace sur les côtés */
+  margin: auto;
+}
+
 
 .conversation-tab {
   width: 100%;
@@ -124,6 +155,7 @@ html {
 .conversation-tab {
 
 }
+
 .input {
   color: var(--cyan);
   background-color: var(--main);
@@ -133,8 +165,7 @@ html {
   font-size: 15px;
  text-shadow: var(--cyan) 0px 0px 20px;
 }
-.glow
-{
+.glow {
 
 }
 
@@ -151,12 +182,10 @@ html {
   border: 1px solid var(--cyan)
 }
 
-.conversation-seen {
-
-}
-
 .content {
   height: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .chat-container {

@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
       <h1>Welcome, {{ user }}</h1>
     </div>
   `,
-  styleUrls: ['./user-screen.component.css'],
+  styleUrls: ['./user-screen.component.scss'],
 })
 export class UserScreenComponent implements OnInit {
   isLogging: boolean = false;

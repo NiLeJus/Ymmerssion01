@@ -3,7 +3,7 @@ import { Timestamp } from "rxjs";
 export type TMessage = {
   sender_id: string;
   text: string;
-  seenBy: string[];
+  seen_by: string[];
   timeStamp: string
 };
 
