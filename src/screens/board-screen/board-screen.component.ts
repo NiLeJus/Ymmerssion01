@@ -33,9 +33,11 @@ export class BoardScreenComponent implements OnInit {
       }
     });
 
+    /*
     this.firebaseService.getUsers().subscribe((user) => {
       console.log(user)
     })
+      */
   }
 
   onSelectConversation(conversation: any) {

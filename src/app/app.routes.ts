@@ -9,7 +9,7 @@ import { ResetPasswordSectionComponent } from '../screens/connection-screen/rese
 export const routes: Routes = [
   { path: '', component: ConnectionScreenComponent },
   { path: 'board', component: BoardScreenComponent },
-  { path: 'user-profile', component: UserScreenComponent },
+  { path: 'user', component: UserScreenComponent },
   { path: 'logging', component: LoggingScreenComponent },
   { path: 'register', component: RegisterScreenComponent },
   { path: 'reset-password', component: ResetPasswordSectionComponent },

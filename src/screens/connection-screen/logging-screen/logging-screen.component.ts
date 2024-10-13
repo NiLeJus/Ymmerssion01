@@ -6,11 +6,12 @@ import { Router } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { getAuth } from 'firebase/auth';
 import { NgClass } from '@angular/common';
+import { HeaderComponent } from '../../../shared-components/header/header.component';
 @Component({
   selector: 'app-logging-screen',
   standalone: true,
   templateUrl: './logging-screen.component.html',
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, HeaderComponent],
 })
 export class LoggingScreenComponent {
   islogging: boolean = false;
@@ -56,7 +57,7 @@ export class LoggingScreenComponent {
           console.error('Erreur de connexion Google:', error);
         });
     }
-   
+
 
   ngOnInit() {
     this.afAuth.onAuthStateChanged(async (user) => {
@@ -64,7 +65,7 @@ export class LoggingScreenComponent {
         this.islogging = false;
       } else {
         this.islogging = true;
-        this.router.navigate(['user-profile']);
+        this.router.navigate(['board']);
       }
     });
   }

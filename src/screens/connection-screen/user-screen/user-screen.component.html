@@ -1,31 +1,31 @@
+<div class="bg-gray-50 py-0">
+  <div class="mx-auto max-w-2xl min-h-[100vh] px-6 lg:max-w-7xl lg:px-8">
 
-<div class="col-span-5 xl:col-span-3">
-  <div class="min-h-[75vh] rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-    <div class="border-b border-stroke px-7 py-4 dark:border-strokedark">
-      <h1 class="font-medium text-black dark:text-white">
-        Informations personnelles
-      </h1>
-    </div>
-    <div class="p-7">
-        <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-          <div class="w-full sm:w-1/2">
-            <p class="mb-3 block text-sm font-medium text-black dark:text-white" for="fullName">Nom</p>
-            <div class="relative">
-              <p class="w-full bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"> {{user?.name}} </p>
-            </div>
-          </div>
+    <div class=" mx-auto  mt-1  gap-2 sm:mt-1  lg:grid-rows-1">
 
-          <div class="w-full sm:w-1/2">
-            <p class="mb-3 block text-sm font-medium text-black dark:text-white" for="fullName">Email</p>
-            <div class="relative">
-              <p class="w-full bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"> {{user?.email}} </p>
-            </div>
+      <!-- Div qui occupe les trois colonnes -->
+      <div class=" relative   overflow-hidden min-h-[90vh] max-h-[90vh]">
+        <div
+          class="absolute inset-0 flex flex-col items-center justify-center
+
+          rounded-lg bg-white max-lg:rounded-t-[2rem]">
+
+          <h1 class="font-medium text-black ">
+            Informations personnelles
+          </h1>
+
+          <p class="mb-3 block text-sm font-medium text-black" for="fullName">Nom</p>
+          <p
+            class="font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 ">
+            {{_user().name}} </p>
+          <p class="mb-3 block text-sm font-medium text-black " for="fullName">Email</p>
+          <p
+            class=" font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 ">
+            {{_user().mail}}
+          </p>
         </div>
-
-        <div class="flex justify-end gap-4.5 flex-wrap items-center flex_container button-animated">
-          <button (click)="handleLoggout()">Déconnexion</button>
-
-        </div>
+        <button (click)="handleLoggout()">Déconnexion</button>
+      </div>
     </div>
   </div>
 </div>
