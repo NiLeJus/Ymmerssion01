@@ -17,8 +17,8 @@
   @for (conversation of _conversations; track $index) {
     <app-room-tab
     [ngClass]="{hidden: isCreatinARoom}"
-    class="conversation-tab" (click)=" onSelectRoom(conversation)"
-    [conversation]="conversation"/>
+    class="" (click)=" onSelectRoom(conversation)"
+    [conversation]="conversation" [_isGlobal]="isGlobal($index)" />
   } @empty {
     <li [ngClass]="{hidden: isCreatinARoom}">Pas d'amis</li>
   }
@@ -30,7 +30,7 @@
 <!--
   <div class="conversation-tab-wrapper">
     @for (conversation of conversations(); track $index) {
-      <app-room-tab
+      <app-globalroom-tab
       class="conversation-tab" (click)="conversationSelected(conversation)"
       [conversation]="conversation" [actualUser]="actualUser()" [hasUnseen]="hasUnseen(conversation.id)"/>
     } @empty {

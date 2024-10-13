@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Firestore, arrayUnion, collection, collectionData, doc, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TConversation, TMessage } from '../_models/conversation.model';
@@ -10,6 +10,7 @@ import { addDoc } from 'firebase/firestore';
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
   firestore = inject(Firestore);
+  globalRoomCollection = collection(this.firestore, '_global_room')
   conversationCollection = collection(this.firestore, '_conversations');
   userCollection = collection(this.firestore, '_users')
   actualUser = '1'; // L'utilisateur actuel
@@ -32,6 +33,16 @@ export class FirebaseService {
 
     // Retourner l'observable filtré
     return filteredConversations;
+  }
+
+  sendMessage(conversationID: string, messageToSend: TMessage): Observable<void> {
+    console.log("Sending Message", messageToSend)
+    console.log("At conversation", conversationID)
+    const docRef = doc(this.firestore, '_conversations/' + conversationID)
+    const promise = updateDoc(docRef, {
+      messages: arrayUnion(messageToSend) // Ajoute le message sans remplacer tout le document
+    });
+    return from(promise)
   }
 
 
@@ -58,10 +69,6 @@ export class FirebaseService {
     }
   }
 
-  sendMessage(conversationID: string, message: TMessage):any {
-    console.log("Sending Message", message)
-    console.log("At conversation", conversationID)
-  }
 
 
   getUsers(): Observable<any>{

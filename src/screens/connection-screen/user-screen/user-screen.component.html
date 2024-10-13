@@ -23,8 +23,11 @@
             class=" font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 ">
             {{_user().mail}}
           </p>
+
+          <button (click)="handleLoggout()">Déconnexion</button>
+
         </div>
-        <button (click)="handleLoggout()">Déconnexion</button>
+
       </div>
     </div>
   </div>
