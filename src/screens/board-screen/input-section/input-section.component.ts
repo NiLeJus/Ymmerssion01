@@ -1,7 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { TMessage } from '../../../_models/conversation.model';
 import { FirebaseService } from './../../../services/fireBase.service';
-import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, signal, SimpleChanges } from '@angular/core';
 import { TUser } from '../../../_models/user.model';
 
 @Component({
@@ -15,30 +15,38 @@ export class InputSectionComponent implements OnChanges {
 
   @Input({ required: true }) conversationID!: string;
 
+  _userSignal = signal<TUser | undefined>(undefined);
   @Input({ required: true }) set _user(value: TUser) {
-    this._selectedConversationSignal.set(value);
+    this._userSignal.set(value);
   }
 
   firebaseService = inject(FirebaseService);
-  enteredText = '';
 
-  // Initialisation de l'objet message
-  messageToSend: TMessage = {
-    seen_by: ['1'], // ID de l'utilisateur actuel
-    text: '',
-    timestamp: '', // Timestamp généré lors de l'envoi
-    sender_id: conversationID // ID de l'utilisateur actuel
-  };
-
-
+  messageToSend!: TMessage; // Initialisation différée
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.conversationID) {
-      this.messageToSend.text = ''; // Réinitialise le texte du message
+    if (changes['_user'] && this._userSignal()) {
+      const user = this._userSignal();
+
+      // Vérifiez si l'utilisateur n'est pas undefined avant d'accéder à ses propriétés
+      if (user) {
+        this.messageToSend = {
+          seen_by: [user.user_id], // ID de l'utilisateur actuel
+          text: '',
+          timestamp: '', // Timestamp généré lors de l'envoi
+          user_id: user.user_id // Assurez-vous que user_id est défini
+        };
+      }
     }
   }
 
   sendMessage() {
+    // Vérifiez si le texte du message est vide
+    if (!this.messageToSend.text.trim()) {
+      console.warn('Le message est vide et ne peut pas être envoyé.');
+      return; // Sortir si le message est vide
+    }
+
     // Générer le timestamp au moment de l'envoi
     this.messageToSend.timestamp = new Date().toISOString(); // Format ISO 8601
 
@@ -49,11 +57,24 @@ export class InputSectionComponent implements OnChanges {
     this.firebaseService.sendMessage(this.conversationID, this.messageToSend).subscribe({
       next: () => {
         console.log('Message envoyé avec succès');
-        this.enteredText = ''; // Réinitialise le champ de texte après l'envoi
+        this.resetMessage(); // Réinitialiser l'objet message
       },
       error: (error) => {
         console.error('Erreur lors de l\'envoi du message:', error);
       }
     });
+  }
+
+  resetMessage() {
+    // Réinitialiser messageToSend
+    if (this._userSignal()) {
+      const user = this._userSignal();
+      this.messageToSend = {
+        seen_by: [user!.user_id],
+        text: '',
+        timestamp: '',
+        user_id: user!.user_id
+      };
+    }
   }
 }

@@ -1,19 +1,27 @@
-import { Timestamp } from 'rxjs';
-import { Component, Input, computed } from '@angular/core';
+import { Component, Input, OnInit, computed, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
+import { TUser } from '../../../../../_models/user.model';
 
 @Component({
   selector: 'app-message-bubble',
   standalone: true,
   imports: [NgClass],
   templateUrl: './message-bubble.component.html',
-  styleUrl: './message-bubble.component.scss'
+  styleUrls: ['./message-bubble.component.scss'] // Correction de styleUrl en styleUrls
 })
+export class MessageBubbleComponent implements OnInit {
 
-export class MessageBubbleComponent {
+  @Input({ required: true }) _message!: any;
 
-  @Input({required: true}) _message!: any;
-actual_user_id = '1'
+  _userSignal = signal<TUser | undefined>(undefined);
+
+  @Input({ required: true }) set _user(value: any) {
+    this._userSignal.set(value);
+  }
+
+  ngOnInit(): void {
+    console.log(this._userSignal());
+  }
 
   _date = computed(() => {
     const timestamp = this._message.timestamp;
@@ -22,10 +30,8 @@ actual_user_id = '1'
     const isToday = now.toDateString() === messageDate.toDateString();
 
     if (isToday) {
-      // Si c'est aujourd'hui, on affiche uniquement l'heure (HH:MM)
       return messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } else {
-      // Si c'est un autre jour, on affiche HH:MM DD/MM/YY
       return messageDate.toLocaleDateString('fr-FR', {
         hour: '2-digit',
         minute: '2-digit',
@@ -36,11 +42,9 @@ actual_user_id = '1'
     }
   });
 
-
-  isReceived(): boolean{
-
-    if ( this.actual_user_id === this._message.user_id ) { return true}
-    else { return false }
+  isReceived(): any {
+    const user = this._userSignal(); // Obtenez l'utilisateur actuel
+    return user && user.user_id === this._message.user_id; // Vérifiez si l'utilisateur existe et comparez les IDs
   }
 
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, UserCredential } from '@angular/fire/auth';
 import { Firestore, setDoc, getDoc, doc } from '@angular/fire/firestore';
-
+import { TUser } from '../_models/user.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -56,19 +56,23 @@ export class Register {
     return sendPasswordResetEmail(this.auth, email);
   }
 
-  async getUserName(userId: string) {
+  async getUserName(userId: string): Promise<TUser | null> {
     const userRef = doc(this.firestore, 'users', userId);
-    const userSnapshot  = await getDoc(userRef);
+    const userSnapshot = await getDoc(userRef);
 
     if (userSnapshot.exists()) {
       const userData = userSnapshot.data();
       return {
-        name: userData ? userData['name'] : null,
-        email: userData ? userData['email'] : null,
-        userId: userId // Récupération du docID à partir du paramètre
-      }
+        name: userData?.['name'] || '',
+        username: userData?.['username'] || '',
+        user_id: userId, // Récupération du docID à partir du paramètre
+        mail: userData?.['email'] || '',
+        password: '', // Remplir selon ce qui est disponible
+        status: 'offline', // Vous pouvez initialiser cela selon vos besoins
+      };
     } else {
       return null;
     }
   }
+
 }

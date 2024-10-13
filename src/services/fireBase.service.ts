@@ -1,54 +1,63 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, arrayUnion, collection, collectionData, doc, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, arrayUnion, collection, collectionData, doc, setDoc, updateDoc, getDoc } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TConversation, TMessage } from '../_models/conversation.model';
-import { update } from 'firebase/database';
 import { TUser } from '../_models/user.model';
-import { addDoc } from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
   firestore = inject(Firestore);
-  globalRoomCollection = collection(this.firestore, '_global_room')
+  globalRoomCollection = collection(this.firestore, '_global_room');
   conversationCollection = collection(this.firestore, '_conversations');
-  userCollection = collection(this.firestore, '_users')
+  userCollection = collection(this.firestore, '_users');
 
   getConversations(userID: string): Observable<TConversation[]> {
-
-    // Récupérer les données de la collection
     const conversations = collectionData(this.conversationCollection, { idField: 'id' }) as Observable<TConversation[]>;
-    console.log(userID)
-    // Appliquer le filtre via pipe
+    console.log(userID);
+
     const filteredConversations = conversations.pipe(
       map((conversations: TConversation[]) =>
         conversations.filter((conversation: TConversation) =>
           conversation.users_id.includes(userID)
-
-      // Ne retourne que les conversations où il y a le user
         )
       )
     );
 
-    // Retourner l'observable filtré
     return filteredConversations;
   }
 
   sendMessage(conversationID: string, messageToSend: TMessage): Observable<void> {
-    console.log("Sending Message", messageToSend)
-    console.log("At conversation", conversationID)
-    const docRef = doc(this.firestore, '_conversations/' + conversationID)
+    console.log("Sending Message", messageToSend);
+    console.log("At conversation", conversationID);
+    const docRef = doc(this.firestore, '_conversations', conversationID);
+
     const promise = updateDoc(docRef, {
-      messages: arrayUnion(messageToSend) // Ajoute le message sans remplacer tout le document
+      messages: arrayUnion(messageToSend)
     });
-    return from(promise)
+
+    return from(promise);
   }
 
-
   createConversation(conversationToCreate: TConversation) {
-    conversationToCreate.timestamp = new Date().toISOString(); // Ajouter un timestamp
+    conversationToCreate.timestamp = new Date().toISOString();
     return from(addDoc(this.conversationCollection, conversationToCreate));
   }
 
+  // Nouvelle méthode pour obtenir le username par doc id
+  getUsernameById(userId: string): Observable<string | null> {
+    const userDocRef = doc(this.firestore, '_users', userId);
 
+    return from(getDoc(userDocRef)).pipe(
+      map((doc) => {
+        if (doc.exists()) {
+          const userData = doc.data() as TUser; // Assurez-vous que TUser contient le champ username
+          return userData.username || null; // Retourne le username ou null si non défini
+        } else {
+          console.log("No such document!");
+          return null;
+        }
+      })
+    );
   }
+}

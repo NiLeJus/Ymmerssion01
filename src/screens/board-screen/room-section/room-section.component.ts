@@ -1,3 +1,4 @@
+import { TUser } from './../../../_models/user.model';
 import { Component, signal, computed, Input, OnInit } from '@angular/core';
 import { MessageBubbleComponent } from './components/message-bubble/message-bubble.component';
 import { FormsModule } from '@angular/forms';
@@ -15,11 +16,17 @@ import { NgClass } from '@angular/common';
 export class RoomSectionComponent {
   // Signal pour la conversation sélectionnée
   _selectedConversationSignal = signal<TConversation | undefined>(undefined);
-  
+
   isCreatingARoom = false
 
   @Input({ required: true }) set _selectedConversation(value: TConversation) {
     this._selectedConversationSignal.set(value);
+  }
+
+  _userSignal = signal<any>(undefined);
+
+  @Input({ required: true }) set _user(value: TUser) {
+    this._userSignal.set(value);
   }
 
   _conversationTitle = computed(() => {

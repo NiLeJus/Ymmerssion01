@@ -27,7 +27,7 @@
         <span class="sr-only">Icon description</span>
       </button>
 
-  
+
 
     </div>
   </div>
@@ -45,7 +45,7 @@
   } @else {
     <!-- Si une conversation est sélectionnée, afficher ses messages -->
     @for (message of _messages(); track $index) {
-      <app-message-bubble [_message]="message"></app-message-bubble>
+      <app-message-bubble [_user]="_userSignal()" [_message]="message"></app-message-bubble>
     } @empty {
       <li>Pas de message</li>
     }

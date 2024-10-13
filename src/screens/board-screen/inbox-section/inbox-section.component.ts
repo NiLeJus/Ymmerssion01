@@ -1,4 +1,5 @@
 import { UserService } from '../../../services/user.service';
+import { TUser } from '../../../_models/user.model';
 import {
   Component,
   signal,
@@ -20,6 +21,12 @@ import { CreateRoomSectionComponent } from '../create-room-section/create-room-s
   styleUrl: './inbox-section.component.scss',
 })
 export class InboxSectionComponent {
+  _userSignal = signal<TUser | undefined>(undefined);
+
+  @Input({ required: true }) set _user(value: TUser) {
+    this._userSignal.set(value);
+  }
+
   @Input({ required: true }) _conversations!: any;
 
   isCreatinARoom = false;
@@ -30,10 +37,10 @@ export class InboxSectionComponent {
 
   selectedConversation: any = signal(undefined);
 
-isGlobal(index : any) {
-  if (index === '0') { return true }
-  else {return false }
-}
+  isGlobal(index : any) {
+    if (index === '0') { return true }
+    else {return false }
+  }
 
   createRoom() {
     this.isCreatinARoom = !this.isCreatinARoom;
