@@ -65,7 +65,7 @@ export class LoggingScreenComponent {
         this.islogging = false;
       } else {
         this.islogging = true;
-        this.router.navigate(['user-profile']);
+        this.router.navigate(['board']);
       }
     });
   }

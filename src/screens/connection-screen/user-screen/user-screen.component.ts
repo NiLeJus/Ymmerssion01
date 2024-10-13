@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { Register } from '../../../services/register.service';
 import { Router } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
+import { TUser } from '../../../_models/user.model';
 
 @Component({
   selector: 'app-user-screen',
@@ -13,7 +14,14 @@ import { CommonModule } from '@angular/common';
 })
 export class UserScreenComponent implements OnInit {
   isLogging: boolean = false;
-  user: {name: string | null, email: string | null} | null = null;
+  user: { name: string | null; email: string | null } | null = null;
+  _user: WritableSignal<TUser> = signal({
+    name: '',
+    user_id: '',
+    mail: '',
+    password: '',
+    status: 'offline',
+  });
 
   constructor(
     public registerService: Register,
@@ -36,11 +44,21 @@ export class UserScreenComponent implements OnInit {
       } else {
         this.isLogging = true;
         // Récupérer le profil complet (nom et email)
-        const profile = await this.registerService.getUserName(user.uid);
-        this.user = profile; // Affecter l'objet { name, email } à la variable `user`
-        console.log(`User logged in:`, this.user);
-      }
-    })
+        const userInfo = await this.registerService.getUserName(user.uid); // { name, email }
+        if (userInfo) {
+          this.user = userInfo;
+          console.log(`User logged in:`, this.user);
 
+          // Mettre à jour le signal _user avec l'objet TUser
+          this._user.set({
+            name: this.user.name || '',
+            user_id: user.uid,
+            mail: this.user.email || '',
+            password: '', // Remplir selon ce qui est disponible
+            status: 'online',
+          });
+        }
+      }
+    });
   }
 }
