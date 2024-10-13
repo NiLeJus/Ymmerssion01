@@ -7,7 +7,6 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { ChatService } from '../../../services/chat.service';
 import { RoomTabComponent } from './room-tab/room-tab.component';
 import { TConversation } from '../../../_models/conversation.model';
 import { NgClass } from '@angular/common';

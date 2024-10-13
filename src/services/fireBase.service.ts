@@ -24,6 +24,7 @@ export class FirebaseService {
       map((conversations: TConversation[]) =>
         conversations.filter((conversation: TConversation) =>
           conversation.users_id.includes(this.actualUser)
+
       // Ne retourne que les conversations où il y a le user
         )
       )
@@ -38,7 +39,7 @@ export class FirebaseService {
     conversationToCreate.timestamp = new Date().toISOString(); // Ajouter un timestamp
     return from(addDoc(this.conversationCollection, conversationToCreate));
   }
-  
+
   getThisUser(): any {
     return {
       user_id: 1,
