@@ -7,34 +7,50 @@
     <h3 class="text-base font-semibold leading-6 text-gray-900">
       {{   _conversationTitle() }}
     </h3>
-    <div class="mt-3 sm:ml-4 sm:mt-0">
-      <button
-        type="button"
-        class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-      >
-        Parametres
+    <div class="mt-3 sm:ml-4 sm:mt-0"
+    [ngClass]="{hidden: !_selectedConversationSignal()}"
+   >
+
+
+      <button type="button"  class="text-blue-700 border
+       border-blue-700 border-b hover:bg-blue-100 hover:text-white
+       focus:ring-4 focus:outline-none bg-white focus:ring-blue-300
+       font-medium rounded-full text-sm p-2.5 text-center
+       inline-flex items-center">
+        <svg  id="fi_8867438" class="h-8 w-8"
+        height="512" viewBox="0 0 512 512"
+        width="512" xmlns="http://www.w3.org/2000/svg"><g><g>
+          <circle cx="222.609" cy="111.304" r="111.304"></circle>
+          <path d="m351.758 295.081c-23.557 10.231-40.106
+          33.931-40.106 61.093-36.728 0-66.783 30.054-66.783
+          66.783 0 7.793 1.337 15.359 4.005 22.261h-137.57c-34.963 0-65.174-26.948-66.677-61.878-2.738-63.664 48.132-116.21 111.199-116.21h133.565c23.558 0 45.535 7.394 63.574 20.147 2.891 2.044 2.04 6.394-1.207 7.804z"></path></g><g><path d="m467.478 422.957c0 12.239-10.016 22.261-22.261 22.261h-44.522v44.522c0 12.239-10.016 22.261-22.261 22.261s-22.261-10.022-22.261-22.261v-44.522h-44.522c-12.245 0-22.261-10.022-22.261-22.261s10.016-22.261 22.261-22.261h44.522v-44.522c0-12.239 10.016-22.261 22.261-22.261s22.261 10.022 22.261 22.261v44.522h44.522c12.245 0 22.261 10.021 22.261 22.261z"></path></g></g></svg>
+        <span class="sr-only">Icon description</span>
       </button>
+
+  
+
     </div>
   </div>
 
   <div
     class="mt-5 max-h-dvh  scrollbar-thin overflow-y-auto flex-1 flex-col px-3 max-lg:pb-12 max-lg:pt-10 lg:pb-2"
   >
-  @if (isCreatingARoom) {
-<app-create-room-section/>}
-@else {
-  @if (_selectedConversation === undefined) {
+ <!-- Si l'utilisateur est en train de créer une room -->
+ @if (isCreatingARoom) {
+  <app-create-room-section />
+} @else {
+  <!-- Si aucune conversation n'est sélectionnée -->
+  @if (_selectedConversationSignal() === undefined) {
     <li>Pas de message</li>
-
   } @else {
-
-    @for (message of _selectedConversation.messages; track $index) {
-      <app-message-bubble [_message]="message"
-      />
+    <!-- Si une conversation est sélectionnée, afficher ses messages -->
+    @for (message of _messages(); track $index) {
+      <app-message-bubble [_message]="message"></app-message-bubble>
     } @empty {
       <li>Pas de message</li>
     }
-  }}
+  }
+}
   </div>
 </div>
 

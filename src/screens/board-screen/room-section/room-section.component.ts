@@ -3,34 +3,41 @@ import { MessageBubbleComponent } from './components/message-bubble/message-bubb
 import { FormsModule } from '@angular/forms';
 import { TConversation } from '../../../_models/conversation.model';
 import { CreateRoomSectionComponent } from "../create-room-section/create-room-section.component";
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-room-section',
   standalone: true,
-  imports: [MessageBubbleComponent, FormsModule, CreateRoomSectionComponent],
+  imports: [MessageBubbleComponent, NgClass, FormsModule, CreateRoomSectionComponent],
   templateUrl: './room-section.component.html',
-  styleUrl: './room-section.component.scss',
+  styleUrls: ['./room-section.component.scss'],
 })
-export class RoomSectionComponent  {
-  @Input({ required: true }) _selectedConversation!: TConversation;
-
+export class RoomSectionComponent {
+  // Signal pour la conversation sélectionnée
+  _selectedConversationSignal = signal<TConversation | undefined>(undefined);
+  
   isCreatingARoom = false
 
+  @Input({ required: true }) set _selectedConversation(value: TConversation) {
+    this._selectedConversationSignal.set(value);
+  }
+
   _conversationTitle = computed(() => {
-   if (this._selectedConversation === undefined) { return "Selectionne une conv"}
-    else { return this._selectedConversation.title}
-  })
+    const selectedConversation = this._selectedConversationSignal();
+    return selectedConversation ? selectedConversation.title : 'Sélectionne une conv';
+  });
 
-
-  user_id = '1'
+  _isRoomSelected = computed(() => {
+    const selectedConversation = this._selectedConversationSignal();
+    return !selectedConversation;
+  });
 
   _messages = computed(() => {
-    return this._selectedConversation.messages
-  })
-
-  messageToSend = '';
+    const selectedConversation = this._selectedConversationSignal();
+    return selectedConversation ? selectedConversation.messages : [];
+  });
 
   dev() {
-    console.log(this._selectedConversation)
+    console.log(this._selectedConversationSignal());
   }
 }

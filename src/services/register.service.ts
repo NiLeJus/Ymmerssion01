@@ -5,7 +5,7 @@ import { Firestore, setDoc, getDoc, doc } from '@angular/fire/firestore';
 @Injectable({
   providedIn: 'root',
 })
-export class Register { 
+export class Register {
 
   constructor(private auth: Auth, private firestore: Firestore) {}
 
@@ -64,7 +64,8 @@ export class Register {
       const userData = userSnapshot.data();
       return {
         name: userData ? userData['name'] : null,
-        email: userData ? userData['email'] : null
+        email: userData ? userData['email'] : null,
+        userId: userId // Récupération du docID à partir du paramètre
       }
     } else {
       return null;
