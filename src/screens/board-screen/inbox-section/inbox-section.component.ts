@@ -15,7 +15,7 @@ import { CreateRoomSectionComponent } from '../create-room-section/create-room-s
 @Component({
   selector: 'app-inbox-section',
   standalone: true,
-  imports: [RoomTabComponent, NgClass, CreateRoomSectionComponent],
+  imports: [RoomTabComponent, NgClass, CreateRoomSectionComponent, ],
   templateUrl: './inbox-section.component.html',
   styleUrl: './inbox-section.component.scss',
 })
@@ -26,8 +26,14 @@ export class InboxSectionComponent {
 
   @Output() select = new EventEmitter();
 
+  gobaleConversation: any = signal(undefined)
 
   selectedConversation: any = signal(undefined);
+
+isGlobal(index : any) {
+  if (index === '0') { return true }
+  else {return false }
+}
 
   createRoom() {
     this.isCreatinARoom = !this.isCreatinARoom;

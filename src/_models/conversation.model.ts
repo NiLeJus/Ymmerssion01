@@ -4,7 +4,7 @@ export type TMessage = {
   sender_id: string;
   text: string;
   seen_by: string[];
-  timeStamp: string
+  timestamp: string
 };
 
 export type TConversation = {

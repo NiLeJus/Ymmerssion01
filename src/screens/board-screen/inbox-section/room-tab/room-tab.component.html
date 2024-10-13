@@ -2,8 +2,12 @@
   class="my-1 relative w-full grow [container-type:inline-size] max-lg:mx-auto max-lg:max-w-sm"
 >
   <div
-    class="flex items-center justify-start p-2 gap-x-6 px-6 sm:px-3.5 bg-slate-100"
-    [ngClass]="hasUnseen() ? 'animate-pulse' : ''"
+    class="flex  texte-white justify-start p-2 gap-x-6 px-6 sm:px-3.5 "
+    [ngClass]="{
+      'animate-pulse': hasUnseen(),
+      'bg-indigo-500': isGlobal(),
+      'bg-slate-100': !isGlobal()
+    }"
   >
     <span class="relative flex h-3 w-3">
       <span
@@ -16,9 +20,9 @@
       ></span>
     </span>
 
-    <p class="text-sm leading-6 text-black">
+    <p class="text-sm  leading-6 text-black">
       <a>
-        <strong class="font-semibold">{{ conversation.title }}</strong> <br />
+        <strong class=" font-semibold">{{ conversation.title }}</strong> <br />
 
         <!-- Ouai faut laisser le point d'interrogation au moins ça marche -->
         {{ conversation.messages[0]?.text }}
@@ -26,5 +30,11 @@
         <span aria-hidden="true"></span>
       </a>
     </p>
+
+    <div class="flex flex-col h-3 w-3">
+      <p class="">{{membersCount()}} </p>
+
+    </div>
+
   </div>
 </div>

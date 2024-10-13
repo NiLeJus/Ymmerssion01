@@ -1,37 +1,52 @@
 import { FormsModule } from '@angular/forms';
 import { TMessage } from '../../../_models/conversation.model';
 import { FirebaseService } from './../../../services/fireBase.service';
-import { Component, inject, Input, OnInit, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-input-section',
   standalone: true,
   imports: [FormsModule],
   templateUrl: './input-section.component.html',
-  styleUrl: './input-section.component.scss'
+  styleUrls: ['./input-section.component.scss']
 })
 export class InputSectionComponent implements OnChanges {
 
+  @Input({ required: true }) conversationID!: string;
 
-  @Input({required: true}) conversationID! : string
+  firebaseService = inject(FirebaseService);
+  enteredText = '';
 
-  firebaseService = inject(FirebaseService)
-  enteredText = ''
+  // Initialisation de l'objet message
   messageToSend: TMessage = {
-    sender_id: '1',
+    seen_by: ['1'], // ID de l'utilisateur actuel
     text: '',
-    seen_by: ['1'],
-    timeStamp: '01'
-  }
+    timestamp: '', // Timestamp généré lors de l'envoi
+    sender_id: '1' // ID de l'utilisateur actuel
+  };
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.conversationID) {
-      this.messageToSend.text = ''
+      this.messageToSend.text = ''; // Réinitialise le texte du message
     }
   }
 
   sendMessage() {
-   console.log(this.conversationID)
-    this.firebaseService.sendMessage(this.conversationID, this.messageToSend)
+    // Générer le timestamp au moment de l'envoi
+    this.messageToSend.timestamp = new Date().toISOString(); // Format ISO 8601
+
+    console.log('Conversation ID:', this.conversationID);
+    console.log('Message à envoyer:', this.messageToSend);
+
+    // Appeler le service Firebase pour envoyer le message
+    this.firebaseService.sendMessage(this.conversationID, this.messageToSend).subscribe({
+      next: () => {
+        console.log('Message envoyé avec succès');
+        this.enteredText = ''; // Réinitialise le champ de texte après l'envoi
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'envoi du message:', error);
+      }
+    });
   }
 }
