@@ -10,15 +10,21 @@
           </div>
     <div class="min-w-0 flex-1"
     [ngClass]="isReceived() ?  'text-right' : 'none'">
-      <p class="text-sm font-semibold text-gray-900">
-       {{_message.user_id}}
-      </p>
+    <p class="text-sm font-semibold text-gray-900">
+      {{ username || _message.user_id }}
+    </p>
+
 
       <p class="text-sm"
       [ngClass]="isReceived() ?  'text-right' : 'none'">
 
 
       {{_message.text}}</p>
+
+      @if (_message.documentRef) {
+        <img [src]="documentUrl" alt="Message document" class="message-image"/>
+      }
+
       <p class="text-sm text-gray-500" [ngClass]="isReceived() ?  'text-right' : 'text-left'">
         <a href="#" class="hover:underline text-end">
         {{_date()}}</a>

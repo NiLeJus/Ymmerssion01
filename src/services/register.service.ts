@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, UserCredential } from '@angular/fire/auth';
 import { Firestore, setDoc, getDoc, doc } from '@angular/fire/firestore';
 import { TUser } from '../_models/user.model';
+import { updateDoc } from 'firebase/firestore';
 @Injectable({
   providedIn: 'root',
 })
@@ -34,7 +35,7 @@ export class Register {
       const user = userCredential.user;
       const userId = user.uid;
 
-      await setDoc(doc(this.firestore, 'users', userId), {
+      await updateDoc(doc(this.firestore, 'users', userId), {
         name: user.displayName,
         email: user.email,
       })

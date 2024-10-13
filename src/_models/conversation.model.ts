@@ -4,8 +4,16 @@ export type TMessage = {
   user_id: string;
   text: string;
   seen_by: string[];
-  timestamp: string
+  timestamp: string;
 };
+
+export type TMessageWPic = {
+  timestamp: string;
+  user_id: string;
+  documentRef: string;
+  seen_by: string[];
+};
+
 
 export type TConversation = {
   id: string;

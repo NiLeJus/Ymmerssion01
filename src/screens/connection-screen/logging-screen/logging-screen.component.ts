@@ -39,7 +39,7 @@ export class LoggingScreenComponent {
         .login(email, password) // Passer email et password dans le bon ordre
         .then(() => {
           alert('Connexion réussi !');
-          this.router.navigate(['/']);
+          this.router.navigate(['/board']);
         })
         .catch((err) => alert('Erreur lors de la connexion : ' + err.message));
     } else {
@@ -51,7 +51,7 @@ export class LoggingScreenComponent {
       this.loggingService.loginWithGoogle()
         .then((userCredential) => {
           console.log('Utilisateur Google connecté:', userCredential.user);
-          this.router.navigate(['/']);
+          this.router.navigate(['/board']);
         })
         .catch((error) => {
           console.error('Erreur de connexion Google:', error);
