@@ -4,12 +4,13 @@ import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Register } from '../../../services/register.service';
 import { Router } from '@angular/router';
 import { NgClass } from '@angular/common';
+import { HeaderComponent } from '../../../shared-components/header/header.component';
 
 @Component({
   selector: 'app-register-screen',
   standalone: true,
   templateUrl: './register-screen.component.html',
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, HeaderComponent],
 })
 export class RegisterScreenComponent implements OnInit {
   constructor(public registerService: Register, private router: Router) {}
@@ -20,9 +21,9 @@ export class RegisterScreenComponent implements OnInit {
   });
   handleSubmit() {
     const { name, email, password } = this.profileForm.value;
-  
+
     console.log('Valeur du formulaire:', { name, email, password }); // Ajoute des logs ici pour vérifier
-  
+
     if (name && email && password) {
       this.registerService
         .register(name, email, password) // Passer email et password dans le bon ordre
@@ -51,6 +52,6 @@ export class RegisterScreenComponent implements OnInit {
       })
       .catch((err) => alert('Erreur lors de la connexion : ' + err.message));
   }
-  
+
   ngOnInit() {}
 }
