@@ -1,33 +1,85 @@
 <div class="bg-gray-50 py-0">
-  <div class="mx-auto max-w-2xl min-h-[100vh] px-6 lg:max-w-7xl lg:px-8">
+  <div class="mx-auto max-w-2xl min-h-[100vh] px-6 lg:max-w-7xl lg:px-8" id="main">
 
     <div class=" mx-auto  mt-1  gap-2 sm:mt-1  lg:grid-rows-1">
 
       <!-- Div qui occupe les trois colonnes -->
-      <div class=" relative   overflow-hidden min-h-[90vh] max-h-[90vh]">
-        <div
-          class="absolute inset-0 flex flex-col items-center justify-center
+      <div class=" relative  overflow-hidden min-h-[95vh] max-h-[90vh] overflow-auto">
+        <div class="absolute inset-0 flex flex-col items-center justify-center
 
-          rounded-lg bg-white max-lg:rounded-t-[2rem]">
+          rounded-lg bg-white max-lg:rounded-t-[2rem]" >
 
-          <h1 class="font-medium text-black ">
-            Informations personnelles
-          </h1>
 
-          <p class="mb-3 block text-sm font-medium text-black" for="fullName">Nom</p>
-          <p
-            class="font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 ">
-            {{_user().name}} </p>
-          <p class="mb-3 block text-sm font-medium text-black " for="fullName">Email</p>
-          <p
-            class=" font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 ">
-            {{_user().mail}}
-          </p>
+          <!-- ICI -->
+         
+          <div class="flex justify-center" style="filter: drop-shadow(10px 10px 10px rgb(240, 239, 239));position:relative;top:0%;overflow: auto;
+  box-sizing: border-box;
+">
+            <div
 
-          <button (click)="handleLoggout()">Déconnexion</button>
+              class="block max-w-[18rem] rounded-lg  text-white shadow-secondary-1" id="card">
+              <div class="border-b-2 border-black/20 px-6 py-3">  <h5 class="mb-2 text-xl font-medium leading-tight">
+                <h1 class="font-medium text-black ">
+                  Informations personnelles
+                </h1>
+              </h5></div>
+              <div class="p-6" style="overflow: auto;">
+                <h5 class="mb-2 text-xl font-medium leading-tight" style="overflow: auto;">
+                 
+                
+        
+                  <p class="mb-2 text-xl font-medium leading-tight " for="fullName" style="color: gray;">Nom</p>
+              
+                </h5>
+                    <p
+                    class="mb-2 text-xl font-medium leading-tight font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 ">
+                    {{_user().name}} </p>
+              </div>
+              <div class="p-6" style="overflow: auto;">
+                    <h5 class="mb-2 text-xl font-medium leading-tight" style="overflow: auto;">
+                  <p class="mb-2 text-xl font-medium leading-tight " for="fullName"  style="color: gray;">Email</p>
+                    </h5>
+                  <p class=" mb-2 text-xl font-medium leading-tight font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 ">
+        
+                    
+                    {{_user().mail}}
+                  </p>
+          
+              </div>
+              
+              <div class="p-6" style="overflow: auto;">
+                <h5 class="mb-2 text-xl font-medium leading-tight" style="overflow: auto;" style="color: gray;">
+                  Id d'utilisateur 
+                </h5>
+                <p class="mb-2 text-xl font-medium leading-tight font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 ">
+                  {{_user().user_id}}
+                </p>
+              </div>
+              <div class="p-6" style="overflow: auto;">
+                <h5 class="mb-2 text-xl font-medium leading-tight" style="overflow: auto;" style="color: gray;">
+                 Statut
+                </h5>
+                <p class="mb-2 text-xl font-medium leading-tight font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4">
+                  {{_user().status}}
+                  
+                </p>
+              </div>
+              <button id="logout" (click)="handleLoggout()" style="border-radius: 5px;filter: drop-shadow(5px 5px 5px rgb(32, 22, 22));background-color:red">Déconnexion</button>
+              <a href="/board" class="-m-1.5 p-1.5"><button  id="home" style="border-radius: 5px;filter: drop-shadow(5px 5px 5px rgb(39, 30, 30));"  >Retour</button></a> 
+              
+            </div>
+            
+            
+        </div>
+   
+
+
+        
 
         </div>
 
+
+        <!--FIN ICI-->
       </div>
     </div>
   </div>

@@ -2,3 +2,26 @@
     display: flex;
     flex-wrap: wrap;
 }
+#logout:hover{
+  scale: 1.1;
+  transition: 1s;
+ filter:blur(10);
+}
+#card{
+/*     background-color: rgba(129, 208, 245, 0.3); */
+--tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+#home{
+    top:180%
+}
+* {
+    box-sizing: border-box;
+    white-space: nowrap; /* Evite les retours à la ligne */
+    max-width: 100%;
+  }
+
+  #main{
+    --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+  }
