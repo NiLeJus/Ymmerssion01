@@ -6,7 +6,7 @@
         <div
           class="absolute inset-px rounded-lg bg-white lg:rounded-l-[2rem]"
         ></div>
-        <app-inbox-section   [_conversations]="_conversations" (select)="onSelectConversation($event)"/>
+        <app-inbox-section [_user]="_user()"  [_conversations]="_conversations" (select)="onSelectConversation($event)"/>
         <div
           class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-l-[2rem]"
         ></div>
@@ -17,6 +17,7 @@
 
 
           <app-room-section
+          [_user]="_user()"
           [_selectedConversation]="_selectedConversation"
           ></app-room-section>
 
@@ -29,7 +30,7 @@
         @if (_selectedConversation === undefined) {
 
         } @else {
-         <app-input-section  [conversationID]="_selectedConversationID" />
+         <app-input-section [_user]="_user()"  [conversationID]="_selectedConversationID" />
         }
         <div
           class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"

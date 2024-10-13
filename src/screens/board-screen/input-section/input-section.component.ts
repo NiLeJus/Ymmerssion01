@@ -2,6 +2,7 @@ import { FormsModule } from '@angular/forms';
 import { TMessage } from '../../../_models/conversation.model';
 import { FirebaseService } from './../../../services/fireBase.service';
 import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { TUser } from '../../../_models/user.model';
 
 @Component({
   selector: 'app-input-section',
@@ -14,6 +15,10 @@ export class InputSectionComponent implements OnChanges {
 
   @Input({ required: true }) conversationID!: string;
 
+  @Input({ required: true }) set _user(value: TUser) {
+    this._selectedConversationSignal.set(value);
+  }
+
   firebaseService = inject(FirebaseService);
   enteredText = '';
 
@@ -22,8 +27,10 @@ export class InputSectionComponent implements OnChanges {
     seen_by: ['1'], // ID de l'utilisateur actuel
     text: '',
     timestamp: '', // Timestamp généré lors de l'envoi
-    sender_id: '1' // ID de l'utilisateur actuel
+    sender_id: conversationID // ID de l'utilisateur actuel
   };
+
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.conversationID) {

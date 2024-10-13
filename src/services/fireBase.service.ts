@@ -13,7 +13,6 @@ export class FirebaseService {
   globalRoomCollection = collection(this.firestore, '_global_room')
   conversationCollection = collection(this.firestore, '_conversations');
   userCollection = collection(this.firestore, '_users')
-  actualUser = '1'; // L'utilisateur actuel
 
   getConversations(userID: string): Observable<TConversation[]> {
 

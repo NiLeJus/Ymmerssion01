@@ -36,10 +36,8 @@ export class BoardScreenComponent implements OnInit {
   });
 
   firebaseService = inject(FirebaseService);
-
   _conversations: any = [];
   _selectedConversation: any
-
   isCreatingARoom = false
   // Calcul de l'ID de la conversation sélectionnée
   _selectedConversationID: any = undefined;
@@ -62,7 +60,7 @@ export class BoardScreenComponent implements OnInit {
             name: this.user.name || '',
             user_id: user.uid,
             mail: this.user.email || '',
-            password: '', 
+            password: '',
             status: 'online',
           });
 
