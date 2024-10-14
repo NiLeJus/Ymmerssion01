@@ -5,6 +5,7 @@ import { provideClientHydration } from "@angular/platform-browser";
 import { initializeApp, provideFirebaseApp, getApp } from "@angular/fire/app";
 import { getAuth, provideAuth } from '@angular/fire/auth'; // Utilisation de la version moderne
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getStorage, provideStorage } from "@angular/fire/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDb4-YJNJ8XzPdTauldWBYQSzgkMIWIy0k",
@@ -24,5 +25,6 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideClientHydration(),
+    provideStorage(() => getStorage()),
   ],
 };

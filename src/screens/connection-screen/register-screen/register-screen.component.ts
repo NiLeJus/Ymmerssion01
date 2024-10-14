@@ -18,15 +18,16 @@ export class RegisterScreenComponent implements OnInit {
     name: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
+    username: new FormControl('', [Validators.required]),
   });
   handleSubmit() {
-    const { name, email, password } = this.profileForm.value;
+    const { name, email, password, username} = this.profileForm.value;
 
     console.log('Valeur du formulaire:', { name, email, password }); // Ajoute des logs ici pour vérifier
 
-    if (name && email && password) {
+    if (name && email && password && username) {
       this.registerService
-        .register(name, email, password) // Passer email et password dans le bon ordre
+        .register(name, email, password, username) // Passer email et password dans le bon ordre
         .then(() =>{ alert('Inscription réussie !'); this.router.navigate(['/'])}
         )
         .catch((err) => alert("Erreur lors de l'inscription : " + err.message));

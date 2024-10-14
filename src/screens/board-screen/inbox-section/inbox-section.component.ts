@@ -1,4 +1,4 @@
-import { UserService } from '../../../services/user.service';
+import { TUser } from '../../../_models/user.model';
 import {
   Component,
   signal,
@@ -20,6 +20,12 @@ import { CreateRoomSectionComponent } from '../create-room-section/create-room-s
   styleUrl: './inbox-section.component.scss',
 })
 export class InboxSectionComponent {
+  _userSignal = signal<TUser | undefined>(undefined);
+
+  @Input({ required: true }) set _user(value: TUser) {
+    this._userSignal.set(value);
+  }
+
   @Input({ required: true }) _conversations!: any;
 
   isCreatinARoom = false;

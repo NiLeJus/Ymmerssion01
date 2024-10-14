@@ -1,7 +1,8 @@
 import { FormsModule } from '@angular/forms';
-import { TMessage } from '../../../_models/conversation.model';
+import { TMessage, TMessageWPic } from '../../../_models/conversation.model';
 import { FirebaseService } from './../../../services/fireBase.service';
-import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, signal, SimpleChanges } from '@angular/core';
+import { TUser } from '../../../_models/user.model';
 
 @Component({
   selector: 'app-input-section',
@@ -13,40 +14,106 @@ import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/cor
 export class InputSectionComponent implements OnChanges {
 
   @Input({ required: true }) conversationID!: string;
+  _userSignal = signal<TUser | undefined>(undefined);
+
+  @Input({ required: true }) set _user(value: TUser) {
+    this._userSignal.set(value);
+  }
 
   firebaseService = inject(FirebaseService);
-  enteredText = '';
 
-  // Initialisation de l'objet message
-  messageToSend: TMessage = {
-    seen_by: ['1'], // ID de l'utilisateur actuel
-    text: '',
-    timestamp: '', // Timestamp généré lors de l'envoi
-    sender_id: '1' // ID de l'utilisateur actuel
-  };
+  messageToSend!: TMessage; // Message texte à envoyer
+  selectedFile: File | null = null; // Fichier image sélectionné
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.conversationID) {
-      this.messageToSend.text = ''; // Réinitialise le texte du message
+    if (changes['_user'] && this._userSignal()) {
+      const user = this._userSignal();
+      if (user) {
+        this.messageToSend = {
+          seen_by: [user.user_id],
+          text: '',
+          timestamp: '',
+          user_id: user.user_id
+        };
+      }
+    }
+  }
+
+  // Méthode pour gérer la sélection d'un fichier
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
     }
   }
 
   sendMessage() {
-    // Générer le timestamp au moment de l'envoi
-    this.messageToSend.timestamp = new Date().toISOString(); // Format ISO 8601
+    // Vérifier si le message texte ou le fichier est vide
+    if (!this.messageToSend.text.trim() && !this.selectedFile) {
+      console.warn('Le message ou l\'image est vide et ne peut pas être envoyé.');
+      return;
+    }
 
-    console.log('Conversation ID:', this.conversationID);
-    console.log('Message à envoyer:', this.messageToSend);
+    // Générer le timestamp lors de l'envoi du message
+    this.messageToSend.timestamp = new Date().toISOString();
 
-    // Appeler le service Firebase pour envoyer le message
-    this.firebaseService.sendMessage(this.conversationID, this.messageToSend).subscribe({
+    // Si un fichier est sélectionné, téléchargez l'image d'abord
+    if (this.selectedFile) {
+      this.firebaseService.uploadImage(this.selectedFile).then((imageUrl: string) => {
+        // Préparer le message avec image
+        const messageWithImage: TMessageWPic = {
+          documentRef: imageUrl,
+          seen_by: [this._userSignal()!.user_id],
+          timestamp: this.messageToSend.timestamp,
+          user_id: this._userSignal()!.user_id
+        };
+
+        // Envoyer d'abord le message avec image
+        this.sendMessageToFirebase(messageWithImage);
+
+        // Puis envoyer le message texte seulement si celui-ci n'est pas vide
+        if (this.messageToSend.text.trim()) {
+          const messageTextOnly: TMessage = {
+            seen_by: [this._userSignal()!.user_id],
+            text: this.messageToSend.text,
+            timestamp: this.messageToSend.timestamp,
+            user_id: this._userSignal()!.user_id
+          };
+          this.sendMessageToFirebase(messageTextOnly);
+        }
+
+      }).catch((error) => {
+        console.error('Erreur lors du téléchargement de l\'image :', error);
+      });
+    } else {
+      // Envoi d'un message texte uniquement
+      this.sendMessageToFirebase(this.messageToSend);
+    }
+  }
+
+  // Méthode générique pour envoyer un message à Firebase
+  sendMessageToFirebase(message: TMessage | TMessageWPic) {
+    this.firebaseService.sendMessage(this.conversationID, message).subscribe({
       next: () => {
         console.log('Message envoyé avec succès');
-        this.enteredText = ''; // Réinitialise le champ de texte après l'envoi
+        this.resetMessage();
       },
       error: (error) => {
-        console.error('Erreur lors de l\'envoi du message:', error);
+        console.error('Erreur lors de l\'envoi du message :', error);
       }
     });
+  }
+
+  resetMessage() {
+    this.selectedFile = null; // Réinitialiser le fichier sélectionné
+    if (this._userSignal()) {
+      const user = this._userSignal();
+      this.messageToSend = {
+        seen_by: [user!.user_id],
+        text: '',
+        timestamp: '',
+        user_id: user!.user_id
+      };
+    }
   }
 }

@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, UserCredential } from '@angular/fire/auth';
 import { Firestore, setDoc, getDoc, doc } from '@angular/fire/firestore';
-
+import { TUser } from '../_models/user.model';
+import { updateDoc } from 'firebase/firestore';
+import { FirebaseService } from './fireBase.service';
 @Injectable({
   providedIn: 'root',
 })
-export class Register { 
+export class Register {
 
-  constructor(private auth: Auth, private firestore: Firestore) {}
+  constructor(private auth: Auth, private firestore: Firestore, private firebaseService: FirebaseService) {}
 
-  async register(name: string, email: string, password: string) {
-    console.log('Enregistrement avec:', name, email, password);
+  async register(name: string, email: string, password: string, username: string) {
+    console.log('Enregistrement avec:', name, email, password, username);
     const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
     const userId = userCredential.user.uid;
 
@@ -18,7 +20,10 @@ export class Register {
     await setDoc(doc(this.firestore, 'users' , userId), {
       name,
       email,
+      username
     });
+
+    await this.firebaseService.addUserToGlobalConversation(userId);
 
     return userCredential;
   }
@@ -34,9 +39,10 @@ export class Register {
       const user = userCredential.user;
       const userId = user.uid;
 
-      await setDoc(doc(this.firestore, 'users', userId), {
+      await updateDoc(doc(this.firestore, 'users', userId), {
         name: user.displayName,
         email: user.email,
+        username: user.displayName
       })
 
       console.log("user found")
@@ -56,18 +62,23 @@ export class Register {
     return sendPasswordResetEmail(this.auth, email);
   }
 
-  async getUserName(userId: string) {
+  async getUserName(userId: string): Promise<TUser | null> {
     const userRef = doc(this.firestore, 'users', userId);
-    const userSnapshot  = await getDoc(userRef);
+    const userSnapshot = await getDoc(userRef);
 
     if (userSnapshot.exists()) {
       const userData = userSnapshot.data();
       return {
-        name: userData ? userData['name'] : null,
-        email: userData ? userData['email'] : null
-      }
+        name: userData?.['name'] || '',
+        username: userData?.['username'] || '',
+        user_id: userId, // Récupération du docID à partir du paramètre
+        mail: userData?.['email'] || '',
+        password: '', // Remplir selon ce qui est disponible
+        status: 'offline', // Vous pouvez initialiser cela selon vos besoins
+      };
     } else {
       return null;
     }
   }
+
 }

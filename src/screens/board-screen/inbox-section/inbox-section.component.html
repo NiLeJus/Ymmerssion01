@@ -23,7 +23,7 @@
     <li [ngClass]="{hidden: isCreatinARoom}">Pas d'amis</li>
   }
 
-  <app-create-room-section [ngClass]="{hidden: !isCreatinARoom}"/>
+  <app-create-room-section [_user]="_userSignal()!" [ngClass]="{hidden: !isCreatinARoom}"/>
 
 
 </div>

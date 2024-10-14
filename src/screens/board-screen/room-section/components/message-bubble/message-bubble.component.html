@@ -1,5 +1,5 @@
 <div [ngClass]="isReceived() ? 'bg-green-50' : 'bg-white' ">
-  <div class="  py-5 " >
+  <div class="  py-5 px-2 " >
   <div class="flex space-x-3"
   [ngClass]="isReceived() ?  'flex-row-reverse' : 'none'">
     <div class="flex-shrink-0 m-1">
@@ -10,20 +10,27 @@
           </div>
     <div class="min-w-0 flex-1"
     [ngClass]="isReceived() ?  'text-right' : 'none'">
-      <p class="text-sm font-semibold text-gray-900">
-       {{_message.user_id}}
-      </p>
+    <p class="text-sm font-semibold text-gray-900">
+      {{ _usernameSignal() }}
+    </p>
+
 
       <p class="text-sm"
       [ngClass]="isReceived() ?  'text-right' : 'none'">
 
 
       {{_message.text}}</p>
+
+      @if (_message.documentRef) {
+        <img [src]="documentUrl" alt="Message document" class="message-image mx-auto my-3"/>
+      }
+
       <p class="text-sm text-gray-500" [ngClass]="isReceived() ?  'text-right' : 'text-left'">
         <a href="#" class="hover:underline text-end">
         {{_date()}}</a>
       </p>
     </div>
+
     <div class="flex flex-shrink-0 self-center">
       <div class="relative inline-block text-left">
 

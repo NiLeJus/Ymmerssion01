@@ -8,12 +8,13 @@ import {
 import { Register } from './../../../services/register.service';
 import { Router } from '@angular/router';
 import { NgClass } from '@angular/common';
+import { HeaderComponent } from '../../../shared-components/header/header.component';
 
 @Component({
   selector: 'app-reset-password-section',
   standalone: true,
   templateUrl: './reset-password-section.component.html',
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, HeaderComponent],
 })
 export class ResetPasswordSectionComponent implements OnInit {
   resetForm = new FormGroup({

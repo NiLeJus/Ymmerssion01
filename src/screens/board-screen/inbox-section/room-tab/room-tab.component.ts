@@ -28,6 +28,8 @@ export class RoomTabComponent implements OnInit {
       )
     );
 
+    console.log(this.hasUnseen())
+
     this.isGlobal.set(this._isGlobal);
     console.log(this.hasUnseen());
   }
