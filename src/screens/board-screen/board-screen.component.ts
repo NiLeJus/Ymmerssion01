@@ -82,6 +82,7 @@ export class BoardScreenComponent implements OnInit {
           this.firebaseService
             .getConversations(this._user().user_id)
             .subscribe((conversations: TConversation[]) => {
+              this._conversations = []
               this._conversations.push(...conversations); // Élargir l'array avec le contenu des conversations
               console.log(this._user().user_id);
               // Aplatir le tableau si nécessaire

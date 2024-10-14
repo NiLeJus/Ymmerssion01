@@ -24,6 +24,12 @@
           placeholder="Votre Message"
         ></textarea>
       </div>
+
+  <div class="flex items-center mt-2">
+    <label for="file" class="mr-3">Ajouter une image :</label>
+    <input type="file" id="file" (change)="onFileSelected($event)" accept="image/*" class="block w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+  </div>
+
       <button
         (click)="sendMessage()"
         class="inline-flex py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"

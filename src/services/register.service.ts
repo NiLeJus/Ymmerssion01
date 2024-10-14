@@ -3,15 +3,16 @@ import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signO
 import { Firestore, setDoc, getDoc, doc } from '@angular/fire/firestore';
 import { TUser } from '../_models/user.model';
 import { updateDoc } from 'firebase/firestore';
+import { FirebaseService } from './fireBase.service';
 @Injectable({
   providedIn: 'root',
 })
 export class Register {
 
-  constructor(private auth: Auth, private firestore: Firestore) {}
+  constructor(private auth: Auth, private firestore: Firestore, private firebaseService: FirebaseService) {}
 
-  async register(name: string, email: string, password: string) {
-    console.log('Enregistrement avec:', name, email, password);
+  async register(name: string, email: string, password: string, username: string) {
+    console.log('Enregistrement avec:', name, email, password, username);
     const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
     const userId = userCredential.user.uid;
 
@@ -19,7 +20,10 @@ export class Register {
     await setDoc(doc(this.firestore, 'users' , userId), {
       name,
       email,
+      username
     });
+
+    await this.firebaseService.addUserToGlobalConversation(userId);
 
     return userCredential;
   }
@@ -38,6 +42,7 @@ export class Register {
       await updateDoc(doc(this.firestore, 'users', userId), {
         name: user.displayName,
         email: user.email,
+        username: user.displayName
       })
 
       console.log("user found")

@@ -1,49 +1,33 @@
 import { Injectable, inject } from '@angular/core';
-import { getStorage, ref, getDownloadURL, FirebaseStorage } from '@angular/fire/storage';
-import { Firestore, addDoc, arrayUnion, collection, collectionData, doc, setDoc, updateDoc, getDoc, DocumentReference } from '@angular/fire/firestore';
-import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { TConversation, TMessage, TMessageWPic } from '../_models/conversation.model';
-import { TUser } from '../_models/user.model';
+import { Storage, ref, getDownloadURL, uploadBytesResumable } from '@angular/fire/storage'; // Importez correctement Storage
+import { Firestore, arrayUnion, collection, doc, getDoc, DocumentReference, updateDoc, addDoc, collectionData } from '@angular/fire/firestore';
+import { Observable, from, map } from 'rxjs';
+import { TMessage, TMessageWPic } from '../_models/conversation.model';
+import { TConversation } from '../_models/conversation.model';
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
-  // Utiliser getStorage pour obtenir l'instance de FirebaseStorage
-  private storage = getStorage(); // Obtenez l'instance du Storage
+  // Injection correcte de Storage
+  private storage = inject(Storage);
 
   firestore = inject(Firestore);
   globalRoomCollection = collection(this.firestore, '_global_room');
   conversationCollection = collection(this.firestore, '_conversations');
   userCollection = collection(this.firestore, '_users');
 
-  async getDocumentByRef(ref: string) {
-    const documentRef: DocumentReference = doc(this.firestore, ref);
-    const documentSnapshot = await getDoc(documentRef);
-
-    if (documentSnapshot.exists()) {
-      return documentSnapshot.data();
-    } else {
-      console.log("No such document!");
-      return null;
+  private isMessageValid(message: TMessage | TMessageWPic): boolean {
+    // Vérifier si le message est de type TMessage
+    if ('text' in message) {
+      return message.text.trim() !== '';
     }
-  }
+    // Vérifier si le message est de type TMessageWPic
+    else if ('documentRef' in message) {
+      // Valider le message TMessageWPic
+      return message.documentRef !== undefined;
+    }
 
-  sendMessage(conversationID: string, messageToSend: TMessage | TMessageWPic): Observable<void> {
-    console.log("Sending Message", messageToSend);
-    console.log("At conversation", conversationID);
-    const docRef = doc(this.firestore, '_conversations', conversationID);
-
-    const promise = updateDoc(docRef, {
-      messages: arrayUnion(messageToSend)
-    });
-
-    return from(promise);
-  }
-  
-  // Méthode pour récupérer l'URL du document depuis Firebase Storage
-  getDocumentUrl(documentRef: string): Promise<string> {
-    const storageRef = ref(this.storage, documentRef); // Utilisez l'instance de FirebaseStorage
-    return getDownloadURL(storageRef); // Récupérer l'URL de téléchargement
+    // Retourne false si le message ne correspond à aucun type valide
+    return false;
   }
 
   getConversations(userID: string): Observable<TConversation[]> {
@@ -59,6 +43,64 @@ export class FirebaseService {
     );
 
     return filteredConversations;
+  }
+
+  // Méthode pour uploader une image et renvoyer l'URL
+  uploadImage(file: File): Promise<any> {
+    const filePath = `images/${new Date().getTime()}_${file.name}`; // Chemin du fichier
+    const fileRef = ref(this.storage, filePath); // Utilisation correcte de ref
+
+    const task = uploadBytesResumable(fileRef, file); // Utilisation de uploadBytesResumable
+
+
+    // Retourne une promesse qui se résout avec l'URL de l'image
+    return task.then(() => {
+      return getDownloadURL(fileRef); // Récupère l'URL de téléchargement
+    });
+  }
+
+  async getDocumentByRef(ref: string) {
+    const documentRef: DocumentReference = doc(this.firestore, ref);
+    const documentSnapshot = await getDoc(documentRef);
+
+    if (documentSnapshot.exists()) {
+      return documentSnapshot.data();
+    } else {
+      console.log("No such document!");
+      return null;
+    }
+  }
+
+  sendMessage(conversationID: string, messageToSend: TMessage | TMessageWPic): Observable<void> {
+    console.log("Sending Message", messageToSend);
+    if (!this.isMessageValid(messageToSend)) {
+      throw new Error('Invalid message'); // Ajoutez un message d'erreur pour le débogage
+    }
+    const docRef = doc(this.firestore, '_conversations', conversationID);
+    return from(updateDoc(docRef, { messages: arrayUnion(messageToSend) }));
+  }
+
+  // Méthode pour récupérer l'URL du document depuis Firebase Storage
+  getDocumentUrl(documentRef: string): Promise<string> {
+    const storageRef = ref(this.storage, documentRef); // Utilisez l'instance de FirebaseStorage
+    return getDownloadURL(storageRef); // Récupérer l'URL de téléchargement
+  }
+
+  async addUserToGlobalConversation(userId: string): Promise<void> {
+    const globalConversationDocRef = doc(this.firestore, '_conversations', '0'); // Index 0 de la conversation globale
+
+    // Récupérer la conversation globale
+    const globalConversationSnapshot = await getDoc(globalConversationDocRef);
+
+    if (globalConversationSnapshot.exists()) {
+      // Mettre à jour la conversation en ajoutant l'utilisateur
+      await updateDoc(globalConversationDocRef, {
+        users_id: arrayUnion(userId) // Ajoute l'uid à la liste users_id
+      });
+      console.log(`Utilisateur ${userId} ajouté à la conversation globale.`);
+    } else {
+      console.error("Conversation globale introuvable.");
+    }
   }
 
   createConversation(conversationToCreate: TConversation) {
