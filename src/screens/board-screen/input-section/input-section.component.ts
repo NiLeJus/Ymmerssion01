@@ -57,9 +57,10 @@ export class InputSectionComponent implements OnChanges {
     // Générer le timestamp lors de l'envoi du message
     this.messageToSend.timestamp = new Date().toISOString();
 
+    // Si un fichier est sélectionné, téléchargez l'image d'abord
     if (this.selectedFile) {
-      // Téléchargez l'image avant d'envoyer le message
       this.firebaseService.uploadImage(this.selectedFile).then((imageUrl: string) => {
+        // Préparer le message avec image
         const messageWithImage: TMessageWPic = {
           documentRef: imageUrl,
           seen_by: [this._userSignal()!.user_id],
@@ -67,7 +68,20 @@ export class InputSectionComponent implements OnChanges {
           user_id: this._userSignal()!.user_id
         };
 
+        // Envoyer d'abord le message avec image
         this.sendMessageToFirebase(messageWithImage);
+
+        // Puis envoyer le message texte seulement si celui-ci n'est pas vide
+        if (this.messageToSend.text.trim()) {
+          const messageTextOnly: TMessage = {
+            seen_by: [this._userSignal()!.user_id],
+            text: this.messageToSend.text,
+            timestamp: this.messageToSend.timestamp,
+            user_id: this._userSignal()!.user_id
+          };
+          this.sendMessageToFirebase(messageTextOnly);
+        }
+
       }).catch((error) => {
         console.error('Erreur lors du téléchargement de l\'image :', error);
       });

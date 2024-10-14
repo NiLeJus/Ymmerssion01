@@ -45,6 +45,18 @@ export class FirebaseService {
     return filteredConversations;
   }
 
+   // Méthode pour récupérer la liste des utilisateurs
+   getUsersList(): Observable<{ id: string, username: string }[]> {
+    return collectionData(this.userCollection, { idField: 'id' }).pipe(
+      map((users: any[]) =>
+        users.map(user => ({
+          id: user.id,
+          username: user.username
+        }))
+      )
+    );
+  }
+
   // Méthode pour uploader une image et renvoyer l'URL
   uploadImage(file: File): Promise<any> {
     const filePath = `images/${new Date().getTime()}_${file.name}`; // Chemin du fichier
@@ -104,7 +116,6 @@ export class FirebaseService {
   }
 
   createConversation(conversationToCreate: TConversation) {
-    conversationToCreate.timestamp = new Date().toISOString();
     return from(addDoc(this.conversationCollection, conversationToCreate));
   }
 

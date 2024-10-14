@@ -10,7 +10,7 @@ import { TUser } from '../../../_models/user.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './user-screen.component.html',
-  styleUrls: ['./user-screen.component.css'],
+  styleUrls: ['./user-screen.component.scss'],
 })
 export class UserScreenComponent implements OnInit {
   isLogging: boolean = false;

@@ -4,7 +4,7 @@ import { MessageBubbleComponent } from './components/message-bubble/message-bubb
 import { FormsModule } from '@angular/forms';
 import { TConversation } from '../../../_models/conversation.model';
 import { CreateRoomSectionComponent } from "../create-room-section/create-room-section.component";
-import { NgClass } from '@angular/common';
+import { NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-room-section',
@@ -15,11 +15,11 @@ import { NgClass } from '@angular/common';
 })
 export class RoomSectionComponent {
   // Signal pour la conversation sélectionnée
-  _selectedConversationSignal = signal<TConversation | undefined>(undefined);
+  _selectedConversationSignal = signal<TConversation | null | undefined>(undefined);
 
   isCreatingARoom = false
 
-  @Input({ required: true }) set _selectedConversation(value: TConversation) {
+  @Input({ required: true }) set _selectedConversation(value: TConversation | null) {
     this._selectedConversationSignal.set(value);
   }
 

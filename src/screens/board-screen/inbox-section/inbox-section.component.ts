@@ -1,4 +1,3 @@
-import { UserService } from '../../../services/user.service';
 import { TUser } from '../../../_models/user.model';
 import {
   Component,
@@ -37,10 +36,10 @@ export class InboxSectionComponent {
 
   selectedConversation: any = signal(undefined);
 
-  isGlobal(index : any) {
-    if (index === '0') { return true }
-    else {return false }
-  }
+isGlobal(index : any) {
+  if (index === '0') { return true }
+  else {return false }
+}
 
   createRoom() {
     this.isCreatinARoom = !this.isCreatinARoom;

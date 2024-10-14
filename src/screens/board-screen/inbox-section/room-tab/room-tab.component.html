@@ -4,12 +4,11 @@
   <div
     class="flex  texte-white justify-start p-2 gap-x-6 px-6 sm:px-3.5 "
     [ngClass]="{
-      'animate-pulse': hasUnseen(),
       'bg-indigo-500': isGlobal(),
       'bg-slate-100': !isGlobal()
     }"
   >
-    <span class="relative flex h-3 w-3">
+    <span class="relative flex h-3 w-3 hidden">
       <span
         [ngClass]="hasUnseen() ? 'hidden' : 'display'"
         class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"
@@ -23,16 +22,20 @@
     <p class="text-sm  leading-6 text-black">
       <a>
         <strong class=" font-semibold">{{ conversation.title }}</strong> <br />
+        <p class="font-bold">Membres {{membersCount()}} </p>
 
-        <!-- Ouai faut laisser le point d'interrogation au moins ça marche -->
-        {{ conversation.messages[0].text }}
+        @if (conversation.messages.length > 0) {
+
+          {{ conversation.messages[0].text }}
+
+        }
+
 
         <span aria-hidden="true"></span>
       </a>
     </p>
 
     <div class="flex flex-col h-3 w-3">
-      <p class="">{{membersCount()}} </p>
 
     </div>
 

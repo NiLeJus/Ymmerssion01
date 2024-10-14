@@ -42,10 +42,11 @@ export class BoardScreenComponent implements OnInit {
     status: 'offline',
   });
   firebaseService = inject(FirebaseService);
-  _conversations: any = [];
-  _selectedConversation: any;
+  _conversations: TConversation[] = [];
+  _selectedConversation: TConversation | null = null; // Assurez-vous d'utiliser le type approprié
   isCreatingARoom = false;
-  _selectedConversationID: any = undefined;
+  _selectedConversationID: string  = 'undefined'; // Utiliser un type plus spécifique
+
   constructor(
     public registerService: Register,
     private router: Router,
@@ -59,16 +60,14 @@ export class BoardScreenComponent implements OnInit {
         this.router.navigate(['/']);
       } else {
         this.isLogging = true;
-        // Récupérer le profil complet (nom, email et username)
         const userInfo: TUser | null = await this.registerService.getUserName(
           user.uid
-        ); // { name, email, username }
+        );
 
         if (userInfo) {
-          this.user = userInfo; // Utilisation de TUser ici
+          this.user = userInfo;
           console.log(`User logged in:`, this.user);
 
-          // Mettre à jour le signal _user avec l'objet TUser
           this._user.set({
             name: this.user.name || '',
             username: this.user.username || '',
@@ -82,16 +81,8 @@ export class BoardScreenComponent implements OnInit {
           this.firebaseService
             .getConversations(this._user().user_id)
             .subscribe((conversations: TConversation[]) => {
-              this._conversations = []
-              this._conversations.push(...conversations); // Élargir l'array avec le contenu des conversations
+              this._conversations = conversations;
               console.log(this._user().user_id);
-              // Aplatir le tableau si nécessaire
-              if (
-                this._conversations.length > 0 &&
-                Array.isArray(this._conversations[0])
-              ) {
-                this._conversations = this._conversations[0];
-              }
             });
         }
       }
@@ -101,10 +92,16 @@ export class BoardScreenComponent implements OnInit {
   onSelectConversation(conversation: TConversation) {
     console.log('Received', conversation);
     this._selectedConversation = conversation;
-    this._selectedConversationID = this._selectedConversation.id; // Assurez-vous que `id` est une propriété valide de TConversation
+    this._selectedConversationID = conversation.id;
   }
 
   dev() {
     console.log(this._selectedConversationID);
+  }
+
+  updateSelectedConversation(updatedConversation: TConversation) {
+    if (this._selectedConversation && this._selectedConversation.id === updatedConversation.id) {
+      this._selectedConversation = updatedConversation; // Met à jour la conversation sélectionnée si elle correspond
+    }
   }
 }

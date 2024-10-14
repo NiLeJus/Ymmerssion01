@@ -2,42 +2,39 @@
   <div class="mx-auto max-w-2xl min-h-[100vh] px-6 lg:max-w-7xl lg:px-8">
     <app-header-component />
     <div class="mt-1 grid gap-2 sm:mt-1 lg:grid-cols-3 lg:grid-rows-1">
-      <div class=" relative lg:row-span-2">
-        <div
-          class="absolute inset-px rounded-lg bg-white lg:rounded-l-[2rem]"
-        ></div>
-        <app-inbox-section [_user]="_user()"  [_conversations]="_conversations" (select)="onSelectConversation($event)"/>
-        <div
-          class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-l-[2rem]"
-        ></div>
+      <div class="relative lg:row-span-2">
+        <div class="absolute inset-px rounded-lg bg-white lg:rounded-l-[2rem]"></div>
+        <app-inbox-section
+          [_user]="_user()"
+          [_conversations]="_conversations"
+          (select)="onSelectConversation($event)">
+        </app-inbox-section>
+        <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-l-[2rem]"></div>
       </div>
 
       <div class="relative lg:row-span-2 min-h-[90vh]">
         <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem]"></div>
 
-
+        @if ( _selectedConversation) {
           <app-room-section
+
           [_user]="_user()"
-          [_selectedConversation]="_selectedConversation"
-          ></app-room-section>
+          [_selectedConversation]="_selectedConversation ? _selectedConversation : null">
+        </app-room-section>
+        }
+
 
         <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem]"></div>
       </div>
+
       <div class="relative lg:row-span-2">
-        <div
-          class="absolute inset-px rounded-lg bg-white max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"
-        ></div>
-        @if (_selectedConversation === undefined) {
+        <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
+        <app-input-section
+  [_user]="_user()"
+  [conversationID]="_selectedConversationID"/>
 
-        } @else {
-         <app-input-section [_user]="_user()"  [conversationID]="_selectedConversationID" />
-        }
-        <div
-          class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"
-        ></div>
+        <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
       </div>
-
-      <button (click)="dev()">DEV</button>
     </div>
   </div>
 </div>
